@@ -1,13 +1,10 @@
-# 📄 README profesional en inglés
 
-**Abre `README.md` en VS Code, borra todo y pega esto:**
 
 ---
 
-```markdown
 # 🦷 Rehab Oral y Estética
 
-> Real-time patient communication platform built with Django Channels and WebSockets for a dental clinic in Querétaro, Mexico.
+> Real-time patient communication platform built with Django Channels and WebSockets for **Rehab Oral y Estética**, a dental clinic in Querétaro, Mexico.
 
 [![Tests](https://github.com/JulsMonjaraz/rehab-oral-estetica/actions/workflows/tests.yml/badge.svg)](https://github.com/JulsMonjaraz/rehab-oral-estetica/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/badge/coverage-93%25-brightgreen)](https://github.com/JulsMonjaraz/rehab-oral-estetica)
@@ -19,23 +16,16 @@
 [![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=flat&logo=redis)](https://redis.io/)
 [![Celery](https://img.shields.io/badge/Celery-5-37814A?style=flat&logo=celery)](https://docs.celeryq.dev/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker)](https://docs.docker.com/compose/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
 ## 📖 Overview
 
-**Rehab Oral y Estética** is a real-time communication platform that lets dental patients chat directly with the clinic's staff (receptionists and doctors) through a modern web interface.
-
-The system replaces a chaotic WhatsApp-based workflow with a proper ticketing and chat platform, with role-based access control, real-time notifications, and automated weekly reports.
-
-The API is documented with Swagger/ReDoc and the entire codebase is covered by 38 tests with **93% test coverage**.
-
-## 🏥 About the client
-
 **Rehab Oral y Estética** is a dental clinic in Querétaro, Mexico, specialized in oral rehabilitation and aesthetic dentistry (implants, prosthetics, and smile design).
 
-The clinic handles a high volume of patient inquiries daily and needed a professional tool to manage them without losing track of any conversation.
+This platform was built to solve a real operational problem: the clinic managed all patient communication through WhatsApp, where messages got lost, emergencies were mixed with routine questions, and there was no way to measure staff performance or response times. The solution is a **real-time communication platform** that digitalizes the entire patient inquiry workflow, from the moment a patient opens a conversation to the moment their case is closed.
+
+The API is documented with Swagger/ReDoc, and the entire codebase is covered by **38 tests with 93% test coverage**.
 
 ## 🎯 The challenge
 
@@ -303,6 +293,8 @@ Backend developer specialized in Django and Python.
 - [GitHub](https://github.com/JulsMonjaraz)
 - [LinkedIn](https://www.linkedin.com/in/juliomonjaraz/)
 
-Built for [Rehab Oral y Estética](https://www.facebook.com/rehaboralyestetica) in Querétaro.
+Built for [Rehab Oral y Estética](http://fb.me/rehaboralyestetica) in Querétaro.
 
 ---
+
+⭐ If you found this project interesting, consider giving it a star.

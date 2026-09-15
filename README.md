@@ -6,6 +6,8 @@
 
 > Real-time patient communication platform built with Django Channels and WebSockets for **Rehab Oral y Estética**, a dental clinic in Querétaro, Mexico.
 
+🔗 **Clinic:** [facebook.com/rehaboralyestetica](https://www.facebook.com/rehaboralyestetica)
+
 [![Tests](https://github.com/JulsMonjaraz/rehab-oral-estetica/actions/workflows/tests.yml/badge.svg)](https://github.com/JulsMonjaraz/rehab-oral-estetica/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/badge/coverage-93%25-brightgreen)](https://github.com/JulsMonjaraz/rehab-oral-estetica)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat&logo=python)](https://www.python.org/)

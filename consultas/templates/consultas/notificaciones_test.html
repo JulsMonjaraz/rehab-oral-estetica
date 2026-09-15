@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Notificaciones - Rehab Oral</title>
+    <style>
+        body { font-family: Arial; max-width: 700px; margin: 40px auto; padding: 20px; background: #f0f7ff; }
+        h1 { color: #2563eb; }
+        #status { text-align: center; color: #888; margin: 8px 0; font-size: 0.9em; }
+        .campana { 
+            position: fixed; top: 20px; right: 20px; 
+            background: white; border-radius: 50%; 
+            width: 60px; height: 60px; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5em; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        .badge {
+            position: absolute; top: -5px; right: -5px;
+            background: #f87171; color: white;
+            border-radius: 50%; width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7em; font-weight: bold;
+        }
+        .notif {
+            background: white; border-left: 4px solid #3b82f6;
+            border-radius: 8px; padding: 16px; margin: 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            animation: slideIn 0.3s ease;
+        }
+        .notif.urgente { border-left-color: #f87171; }
+        .notif h3 { margin: 0 0 4px 0; font-size: 1em; color: #1e293b; }
+        .notif p { margin: 0; color: #64748b; font-size: 0.85em; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="campana">
+        🔔
+        <div class="badge" id="badge" style="display: none;">0</div>
+    </div>
+    
+    <h1>🔔 Notificaciones</h1>
+    <p><strong>Usuario:</strong> {{ user.username }} ({{ user.rol }})</p>
+    <div id="status">Conectando...</div>
+    <div id="notificaciones"></div>
+
+    <script>
+        const token = "{{ token }}";
+        const notifs = document.getElementById('notificaciones');
+        const status = document.getElementById('status');
+        const badge = document.getElementById('badge');
+        let contador = 0;
+        
+        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/notificaciones/?token=${token}`);
+        
+        ws.onopen = () => {
+            status.textContent = '✅ Conectado';
+            status.style.color = 'green';
+        };
+        
+        ws.onclose = () => {
+            status.textContent = '❌ Desconectado';
+            status.style.color = 'red';
+        };
+        
+        ws.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            
+            contador++;
+            badge.textContent = contador;
+            badge.style.display = 'flex';
+            
+            const div = document.createElement('div');
+            
+            if (data.tipo === 'nueva_consulta') {
+                div.className = 'notif ' + (data.prioridad === 'dolor_agudo' ? 'urgente' : '');
+                div.innerHTML = `
+                    <h3>🆕 Nueva consulta #${data.consulta_id}</h3>
+                    <p><strong>${data.paciente}</strong>: ${data.motivo}</p>
+                    <p>Prioridad: ${data.prioridad}</p>
+                `;
+            } else if (data.tipo === 'nuevo_mensaje') {
+                div.className = 'notif';
+                div.innerHTML = `
+                    <h3>💬 Nuevo mensaje en consulta #${data.consulta_id}</h3>
+                    <p><strong>${data.autor}</strong>: ${data.contenido}...</p>
+                `;
+            }
+            
+            notifs.prepend(div);
+        };
+    </script>
+</body>
+</html>

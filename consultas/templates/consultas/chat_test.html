@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat de prueba - Rehab Oral</title>
+    <style>
+        body { font-family: Arial; max-width: 700px; margin: 40px auto; padding: 20px; background: #f0f7ff; }
+        h1 { color: #2563eb; }
+        #chat { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 20px; height: 400px; overflow-y: auto; margin-bottom: 12px; }
+        .msg { padding: 8px 12px; border-radius: 12px; margin: 6px 0; max-width: 70%; }
+        .msg.mio { background: #3b82f6; color: white; margin-left: auto; }
+        .msg.otro { background: #e0e7ff; color: #1e293b; }
+        .msg .autor { font-size: 0.75em; opacity: 0.7; }
+        #form { display: flex; gap: 8px; }
+        #input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; }
+        button { padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #2563eb; }
+        #status { text-align: center; color: #888; margin: 8px 0; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1>🦷 Chat - Consulta #{{ consulta_id }}</h1>
+    <p><strong>Usuario:</strong> {{ user.username }} ({{ user.rol }})</p>
+    <div id="status">Conectando...</div>
+    <div id="chat"></div>
+    <form id="form">
+        <input type="text" id="input" placeholder="Escribe un mensaje..." autocomplete="off">
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script>
+        const consultaId = {{ consulta_id }};
+        const token = "{{ token }}";
+        const username = "{{ user.username }}";
+        
+        const chat = document.getElementById('chat');
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const status = document.getElementById('status');
+        
+        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${consultaId}/?token=${token}`);
+        
+        ws.onopen = () => {
+            status.textContent = '✅ Conectado';
+            status.style.color = 'green';
+        };
+        
+        ws.onclose = () => {
+            status.textContent = '❌ Desconectado';
+            status.style.color = 'red';
+        };
+        
+        ws.onerror = (e) => {
+            status.textContent = '⚠️ Error de conexión';
+            status.style.color = 'red';
+        };
+        
+        ws.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            
+            if (data.tipo === 'mensaje') {
+                const m = data.mensaje;
+                const div = document.createElement('div');
+                div.className = 'msg ' + (m.autor === username ? 'mio' : 'otro');
+                div.innerHTML = `<div class="autor">${m.autor} (${m.autor_rol})</div>${m.contenido}`;
+                chat.appendChild(div);
+                chat.scrollTop = chat.scrollHeight;
+            } else if (data.tipo === 'user_joined') {
+                const div = document.createElement('div');
+                div.style.textAlign = 'center';
+                div.style.color = '#888';
+                div.style.fontSize = '0.85em';
+                div.textContent = `${data.usuario} se unió al chat`;
+                chat.appendChild(div);
+            } else if (data.tipo === 'user_left') {
+                const div = document.createElement('div');
+                div.style.textAlign = 'center';
+                div.style.color = '#888';
+                div.style.fontSize = '0.85em';
+                div.textContent = `${data.usuario} salió del chat`;
+                chat.appendChild(div);
+            }
+        };
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const contenido = input.value.trim();
+            if (!contenido || ws.readyState !== WebSocket.OPEN) return;
+            
+            ws.send(JSON.stringify({ tipo: 'mensaje', contenido }));
+            input.value = '';
+        });
+    </script>
+</body>
+</html>
